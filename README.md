@@ -1,13 +1,13 @@
 # enkor-bnb
 
 ## 과제 제출 방식
-main 브랜치에 PR 해주세요.
+- main 브랜치에 PR 해주세요.
 
 ## 필수 스택
-Node.js 14 이상
-Express.js
-MySQL or Sqlite
-Typescript or Javascript
+- Node.js 14 이상
+- Express.js
+- MySQL or Sqlite
+- Typescript or Javascript
 
 ## 구현 기능
 숙박 플랫폼을 서비스하기 위한 REST API를 구현해야 합니다.
