@@ -22,8 +22,8 @@
     "id": 2,
     "name": "House of card",
     "description": "하우스 오브 카드(House of cards)는, 카드로 쌓은 집처럼 엉성하고 비현실적인 계획을 의미한다. 또한 미국 하원을 House라고 부른다는 점과 Cards가 도박을 의미한다는 점을 감안하면 권모술수가 판치는, 그래서 엉성하고 불안정한 하원을 은유하는 중의적 의미도 있다.",
-    "address": "미국",
-    "university": "외국대학교",
+    "address": "경기 성남시 수정구 대왕판교로 815 R동 766호",
+    "university": "가천대학교",
     "houseType": "단독주택",
     "pricePerDay": 40000,
     "images": [
