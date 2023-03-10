@@ -5,7 +5,7 @@
 
 ## 필수 스택
 - Node.js 14 이상
-- Express.js
+- Express.js or Nest.js
 - MySQL or Sqlite
 - Typescript or Javascript
 
