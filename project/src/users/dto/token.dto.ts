@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class LoginResponseDto {
+export class TokenDto {
     @ApiProperty({
         example: 'Bearer eyJhbGciO.......',
         required: true,

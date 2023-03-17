@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Authentication } from 'src/common/decorators/authentication.decorator';
+import { TokenDto } from 'src/users/dto/token.dto';
 import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
 import { ReservationConfirmDto } from './dto/reservation.confirm.dto';
 import { ReservationDetailsDto } from './dto/reservation.details.dto';
@@ -36,7 +38,7 @@ export class ReservationsController {
         description: '예약 내역 조회에 실패하였습니다.',
     })
     @Get(':reservationId')
-    getReservationDetails(): ReservationDetailsDto {
+    getReservationDetails(@Authentication() token: TokenDto): ReservationDetailsDto {
         return;
     }
 
@@ -68,7 +70,10 @@ export class ReservationsController {
         description: '숙박 예약에 실패하였습니다.',
     })
     @Post(':roomId')
-    createReservation(@Body() data: ReservationRequestDto): ReservationConfirmDto {
+    createReservation(
+        @Body() data: ReservationRequestDto,
+        @Authentication() token: TokenDto,
+    ): ReservationConfirmDto {
         return;
     }
 }

@@ -4,7 +4,7 @@ import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNu
 import { User } from '../common/decorators/user.decorator';
 import { JoinRequestDto } from './dto/join.request.dto';
 import { LoginRequestDto } from './dto/login.request.dto';
-import { LoginResponseDto } from './dto/login.response.dto';
+import { TokenDto } from './dto/token.dto';
 import { UsersService } from './users.service';
 
 @UseInterceptors(UndefinedToNullInterceptor)
@@ -52,7 +52,7 @@ export class UsersController {
     @ApiResponse({
         status: 200,
         description: '로그인 성공',
-        type: LoginResponseDto,
+        type: TokenDto,
     })
     @ApiResponse({
         status: 412,
@@ -63,7 +63,7 @@ export class UsersController {
         description: '로그인에 실패하였습니다.',
     })
     @Post('login')
-    loginUser(@User() user: LoginRequestDto): LoginResponseDto {
+    loginUser(@User() user: LoginRequestDto): TokenDto {
         return;
     }
 }
