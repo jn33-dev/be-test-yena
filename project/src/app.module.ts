@@ -7,6 +7,10 @@ import { UsersModule } from './users/users.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { ReservationsModule } from './reservations/reservations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Users } from './users/entities/users.entity';
+import { Rooms } from './rooms/entities/rooms.entity';
+import { Images } from './rooms/entities/imgaes.entity';
+import { Reservations } from './reservations/entities/reservations.entity';
 
 @Module({
     imports: [
@@ -18,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             username: process.env.MYSQL_USERNAME,
             password: process.env.MYSQL_PASSWORD,
             database: process.env.MYSQL_DATABASE,
-            entities: [],
+            entities: [Users, Rooms, Images, Reservations],
             synchronize: true,
             logging: false,
             keepConnectionAlive: true,
