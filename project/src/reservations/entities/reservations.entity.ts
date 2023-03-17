@@ -16,10 +16,10 @@ export class Reservations {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
-    @Column('tinytext')
+    @Column('varchar')
     startDate: string;
 
-    @Column('tinytext')
+    @Column('varchar')
     endDate: string;
 
     @Column('tinyint')
@@ -27,6 +27,9 @@ export class Reservations {
 
     @Column('tinyint')
     children: number;
+
+    @Column('varchar')
+    contact: string;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -37,13 +40,13 @@ export class Reservations {
     @DeleteDateColumn({ select: false })
     deletedAt: Date | null;
 
-    @Column('int', { name: 'UserId' })
-    UserId: number;
+    @Column('int', { name: 'UserId', nullable: true })
+    UserId: number | null;
 
-    @Column('int', { name: 'RoomId' })
-    RoomId: number;
+    @Column('int', { name: 'RoomId', nullable: true })
+    RoomId: number | null;
 
-    @ManyToOne(() => Users, { onDelete: 'SET NULL', onUpdate: 'CASCADE' })
+    @ManyToOne(() => Users, { cascade: ['soft-remove', 'update'], onDelete: 'SET NULL' })
     @JoinColumn({ name: 'UserId', referencedColumnName: 'id' })
     User: Users;
 
