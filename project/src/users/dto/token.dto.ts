@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmpty, IsString } from 'class-validator';
 
 export class TokenDto {
+    @IsString()
+    @IsEmpty()
     @ApiProperty({
         example: 'Bearer eyJhbGciO.......',
         required: true,
@@ -8,6 +11,8 @@ export class TokenDto {
     })
     public accessToken: string;
 
+    @IsString()
+    @IsEmpty()
     @ApiProperty({
         example: 'Bearer eyJhbGciO.......',
         required: true,
