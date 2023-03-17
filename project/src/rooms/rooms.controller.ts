@@ -1,9 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
 import { RoomDetailsDto } from './dto/room.details.dto';
 import { RoomListDto } from './dto/room.list.dto';
 import { RoomsService } from './rooms.service';
 
+@UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('Rooms')
 @Controller('api/rooms')
 export class RoomsController {

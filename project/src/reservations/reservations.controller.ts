@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
 import { ReservationConfirmDto } from './dto/reservation.confirm.dto';
 import { ReservationDetailsDto } from './dto/reservation.details.dto';
 import { ReservationRequestDto } from './dto/reservation.request.dto';
 import { ReservationsService } from './reservations.service';
 
+@UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('Reservations')
 @Controller('api/reservations')
 export class ReservationsController {

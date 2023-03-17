@@ -1,10 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
+import { User } from '../common/decorators/user.decorator';
 import { JoinRequestDto } from './dto/join.request.dto';
 import { LoginRequestDto } from './dto/login.request.dto';
 import { LoginResponseDto } from './dto/login.response.dto';
 import { UsersService } from './users.service';
 
+@UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('Users')
 @Controller('api/users')
 export class UsersController {
@@ -60,7 +63,7 @@ export class UsersController {
         description: '로그인에 실패하였습니다.',
     })
     @Post('login')
-    loginUser(@Body() data: LoginRequestDto): LoginResponseDto {
+    loginUser(@User() user: LoginRequestDto): LoginResponseDto {
         return;
     }
 }
