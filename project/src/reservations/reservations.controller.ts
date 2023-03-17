@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Authentication } from 'src/common/decorators/authentication.decorator';
-import { TokenDto } from 'src/users/dto/token.dto';
+import { Authentication } from '../common/decorators/authentication.decorator';
+import { TokenDto } from '../users/dto/token.dto';
 import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
 import { ReservationConfirmDto } from './dto/reservation.confirm.dto';
 import { ReservationDetailsDto } from './dto/reservation.details.dto';

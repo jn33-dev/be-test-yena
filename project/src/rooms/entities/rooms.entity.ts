@@ -6,7 +6,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { Images } from './imgaes.entity';
+import { Images } from './images.entity';
 import { Reservations } from '../../reservations/entities/reservations.entity';
 
 @Entity()
