@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RoomDetailDto } from 'src/rooms/dto/room.details.dto';
 import { ReservationConfirmDto } from './dto/reservation.confirm.dto';
 import { ReservationDetailsDto } from './dto/reservation.details.dto';
 import { ReservationRequestDto } from './dto/reservation.request.dto';
