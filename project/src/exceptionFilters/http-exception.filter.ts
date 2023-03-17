@@ -7,10 +7,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const status = exception.getStatus();
-        const errorMessage = exception.message;
+        const err = exception.getResponse() as
+            | { message: any; statusCode: number }
+            // class-validator에서 발생한 에러 식별
+            | { error: string; statusCode: 400; message: string[] };
 
+        // class-validator에서 발생한 에러 처리
+        if (typeof err !== 'string' && err.statusCode === 400) {
+            return response.status(status).json({
+                errorMessage: '요청한 데이터 형식을 확인해주세요.',
+                validationDetails: err.message,
+            });
+        }
         console.error(exception);
 
-        response.status(status).json({ errorMessage });
+        response.status(status).json({ errorMessage: err.message });
     }
 }
