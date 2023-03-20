@@ -1,4 +1,14 @@
-import { Body, Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    Post,
+    Put,
+    Redirect,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
 import { User } from '../common/decorators/user.decorator';
@@ -8,7 +18,8 @@ import { UsersService } from './users.service';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
 import { Users } from './entities/users.entity';
 import { AuthService } from '../auth/auth.service';
-import { ConfigService } from '@nestjs/config';
+import { RefreshToken } from '../common/decorators/refresh-token.decorator';
+import { JwtRefreshGuard } from '../auth/jwt-refresh-auth.guard';
 
 @UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('Users')
@@ -17,9 +28,9 @@ export class UsersController {
     constructor(
         private readonly usersService: UsersService,
         private readonly authService: AuthService,
-        private readonly configService: ConfigService,
     ) {}
 
+    // ############### 회원가입 SWAGGER ##############
     @ApiOperation({ summary: '회원가입' })
     @ApiResponse({
         status: 201,
@@ -48,6 +59,7 @@ export class UsersController {
         return { message: '회원가입에 성공하였습니다.' };
     }
 
+    // ############### 로그인  SWAGGER ##############
     @ApiOperation({ summary: '로그인' })
     @ApiResponse({
         status: 200,
@@ -65,9 +77,31 @@ export class UsersController {
     //  ########## 로그인 API ###########
     @UseGuards(LocalAuthGuard)
     @Post('login')
+    @HttpCode(200)
     async loginUser(@User() user: Users) {
-        const authentication = await this.authService.createToken(user.id);
+        const accessToken = await this.authService.createAccessToken(user.id);
+        const refreshToken = await this.authService.createRefreshToken(user.id);
+        const authentication = { accessToken, refreshToken };
+        return { authentication };
+    }
 
+    // ########## accessToken 재발급 API #############
+    @ApiOperation({ summary: 'accessToken 재발급' })
+    @ApiResponse({
+        status: 200,
+        description: '토큰 재발급 성공',
+        type: TokenDto,
+    })
+    @ApiResponse({
+        status: 401,
+        description: '로그인 후 사용 가능합니다.',
+    })
+    @UseGuards(JwtRefreshGuard)
+    @Put('authorization')
+    @Redirect('/', 200)
+    async authenticateWithRefreshToken(@RefreshToken() user: Users) {
+        const accessToken = await this.authService.createAccessToken(user.id);
+        const authentication = { accessToken, refreshToken: user.refreshToken };
         return { authentication };
     }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -35,25 +35,45 @@ export class AuthService {
         return null;
     }
 
-    async createToken(userId: number): Promise<TokenDto> {
+    async createAccessToken(userId: number): Promise<String> {
         const accessToken = `Bearer ${this.jwtService.sign(
             { userId },
             {
-                expiresIn: Number(await this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION')),
+                expiresIn: await this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION'),
             },
         )}`;
+
+        return accessToken;
+    }
+
+    async createRefreshToken(userId: number): Promise<String> {
         const refreshToken = `Bearer ${this.jwtService.sign(
             {},
             {
-                expiresIn: Number(await this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION')),
+                expiresIn: await this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION'),
             },
         )}`;
 
         await this.usersRepository.save({
             id: userId,
-            refreshToken,
+            refreshToken: await bcrypt.hash(refreshToken, 12),
         });
 
-        return { accessToken, refreshToken };
+        return refreshToken;
+    }
+
+    async findUserByRefreshToken(refreshToken: string) {
+        console.log('auth service findUserByRefreshToken');
+        const refreshTokenHashValue = await bcrypt.hash(refreshToken, 12);
+        const user = await this.usersRepository.findOne({
+            where: { refreshToken: refreshTokenHashValue },
+            select: ['id', 'nickname'],
+        });
+        console.log(user);
+
+        if (!user) {
+            throw new UnauthorizedException();
+        }
+        return user;
     }
 }
