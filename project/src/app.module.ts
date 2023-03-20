@@ -11,6 +11,7 @@ import { Users } from './users/entities/users.entity';
 import { Rooms } from './rooms/entities/rooms.entity';
 import { Images } from './rooms/entities/images.entity';
 import { Reservations } from './reservations/entities/reservations.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { Reservations } from './reservations/entities/reservations.entity';
         UsersModule,
         RoomsModule,
         ReservationsModule,
+        AuthModule,
     ],
     controllers: [AppController],
     providers: [AppService],

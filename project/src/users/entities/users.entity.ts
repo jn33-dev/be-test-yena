@@ -7,6 +7,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { Reservations } from '../../reservations/entities/reservations.entity';
 
 @Entity()
@@ -22,6 +23,10 @@ export class Users {
 
     @Column('text')
     password: string;
+
+    @Column({ type: 'text', nullable: true })
+    @Exclude()
+    refreshToken?: string;
 
     @CreateDateColumn({ select: false })
     createdAt: Date;

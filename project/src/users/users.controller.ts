@@ -1,17 +1,24 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
 import { User } from '../common/decorators/user.decorator';
 import { JoinRequestDto } from './dto/join.request.dto';
-import { LoginRequestDto } from './dto/login.request.dto';
 import { TokenDto } from './dto/token.dto';
 import { UsersService } from './users.service';
+import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { Users } from './entities/users.entity';
+import { AuthService } from '../auth/auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('Users')
 @Controller('api/users')
 export class UsersController {
-    constructor(private usersService: UsersService) {}
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly authService: AuthService,
+        private readonly configService: ConfigService,
+    ) {}
 
     @ApiOperation({ summary: '회원가입' })
     @ApiResponse({
@@ -56,8 +63,11 @@ export class UsersController {
         description: '요청한 데이터 형식을 확인해주세요.',
     })
     //  ########## 로그인 API ###########
+    @UseGuards(LocalAuthGuard)
     @Post('login')
-    loginUser(@User() user: LoginRequestDto): TokenDto {
-        return;
+    async loginUser(@User() user: Users) {
+        const authentication = await this.authService.createToken(user.id);
+
+        return { authentication };
     }
 }
