@@ -12,13 +12,22 @@ export class HttpExceptionFilter implements ExceptionFilter {
             // class-validator에서 발생한 에러 식별
             | { error: string; statusCode: 400; message: string[] };
 
-        // class-validator에서 발생한 에러 처리
-        if (typeof err !== 'string' && err.statusCode === 400) {
-            return response.status(status).json({
-                errorMessage: '요청한 데이터 형식을 확인해주세요.',
-                validationDetails: err.message,
-            });
+        if (typeof err !== 'string') {
+            // class-validator에서 발생한 에러 처리
+            if (err.statusCode === 400) {
+                return response.status(status).json({
+                    errorMessage: '요청한 데이터 형식을 확인해주세요.',
+                    validationDetails: err.message,
+                });
+            }
+            // JWT 인증 실패 에러 처리
+            if (err.statusCode === 401) {
+                return response.status(status).json({
+                    errorMessage: '로그인 후 사용 가능합니다.',
+                });
+            }
         }
+
         console.error(exception);
 
         return response.status(status).json({ errorMessage: exception.message });
