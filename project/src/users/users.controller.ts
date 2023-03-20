@@ -85,7 +85,7 @@ export class UsersController {
         return { authentication };
     }
 
-    // ########## accessToken 재발급 API #############
+    // ########## accessToken 재발급 SWAGGER #############
     @ApiOperation({ summary: 'accessToken 재발급' })
     @ApiResponse({
         status: 200,
@@ -96,6 +96,7 @@ export class UsersController {
         status: 401,
         description: '로그인 후 사용 가능합니다.',
     })
+    // ########## accessToken 재발급 API #############
     @UseGuards(JwtRefreshGuard)
     @Put('authorization')
     @Redirect('/', 200)
