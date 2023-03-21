@@ -34,16 +34,16 @@ export class Reservations {
     @CreateDateColumn()
     createdAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ select: false })
     updatedAt: Date;
 
     @DeleteDateColumn({ select: false })
     deletedAt: Date | null;
 
-    @Column('int', { name: 'UserId', nullable: true })
+    @Column('int', { name: 'UserId', nullable: true, select: false })
     UserId: number | null;
 
-    @Column('int', { name: 'RoomId', nullable: true })
+    @Column('int', { name: 'RoomId', nullable: true, select: false })
     RoomId: number | null;
 
     @ManyToOne(() => Users, { cascade: ['soft-remove', 'update'], onDelete: 'SET NULL' })
