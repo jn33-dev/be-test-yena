@@ -26,6 +26,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
                     errorMessage: '로그인 후 사용 가능합니다.',
                 });
             }
+            // 500에러 처리
+            if (err.statusCode === 500) {
+                return response.status(status).json({
+                    errorMessage: '서버 오류가 발생했습니다.',
+                });
+            }
         }
 
         console.error(exception);
