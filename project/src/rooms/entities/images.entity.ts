@@ -29,7 +29,7 @@ export class Images {
     @Column('int', { name: 'RoomId' })
     RoomId: number;
 
-    @ManyToOne(() => Rooms, { cascade: ['update', 'remove'] })
+    @ManyToOne(() => Rooms, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
     @JoinColumn({ name: 'RoomId', referencedColumnName: 'id' })
     Room: Rooms;
 }
