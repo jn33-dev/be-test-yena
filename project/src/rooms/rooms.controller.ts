@@ -1,4 +1,14 @@
-import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Post,
+    Query,
+    UseInterceptors,
+} from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UndefinedToNullInterceptor } from '../common/interceptors/undefinedToNull.interceptor';
 import { RoomDetailsDto } from './dto/room.details.dto';
@@ -9,7 +19,7 @@ import { RoomsService } from './rooms.service';
 @ApiTags('Rooms')
 @Controller('api/rooms')
 export class RoomsController {
-    constructor(private roomsService: RoomsService) {}
+    constructor(private readonly roomsService: RoomsService) {}
 
     // 매물 목록 조회 API
     @ApiOperation({ summary: '매물 목록 조회' })
@@ -35,12 +45,21 @@ export class RoomsController {
         type: [RoomListDto],
     })
     @ApiResponse({
-        status: 400,
-        description: '매물 조회에 실패하였습니다.',
+        status: 500,
+        description: '서버 오류가 발생했습니다.',
     })
     @Get()
-    getRooms(@Query('page') page, @Query('size') size, @Query('sort') sort): Array<RoomListDto> {
-        return;
+    async getRooms(
+        @Query('page', ParseIntPipe) page,
+        @Query('size', ParseIntPipe) size,
+        @Query('sort') sort,
+    ): Promise<Array<RoomListDto>> {
+        if (sort.includes('+')) {
+            sort = 'ASC';
+        } else {
+            sort = 'DESC';
+        }
+        return await this.roomsService.getRoomList(page, size, sort);
     }
 
     // 매물 상세 조회 API
@@ -56,15 +75,15 @@ export class RoomsController {
         type: RoomDetailsDto,
     })
     @ApiResponse({
-        status: 400,
-        description: '매물 조회에 실패하였습니다.',
-    })
-    @ApiResponse({
         status: 404,
         description: '매물이 존재하지 않습니다.',
     })
+    @ApiResponse({
+        status: 500,
+        description: '서버 오류가 발생했습니다.',
+    })
     @Get(':roomId')
-    getRoomDetail(@Param() roomId: number): RoomDetailsDto {
-        return;
+    async getRoomDetail(@Param() roomId: number): Promise<RoomDetailsDto> {
+        return await this.roomsService.getRoomDetails(roomId);
     }
 }

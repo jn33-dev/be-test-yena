@@ -7,5 +7,5 @@ export class RoomListDto extends OmitType(RoomDetailsDto, ['description'] as con
         required: true,
         description: 'roomId',
     })
-    public roomId: number;
+    public id: number;
 }
